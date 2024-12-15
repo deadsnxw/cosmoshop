@@ -1,0 +1,155 @@
+openapi: 3.0.1
+info:
+  title: Cosmo Cats Intergalactic Marketplace API
+  description: API для управління товарами на маркетплейсі космічних товарів.
+  version: 1.0.0
+paths:
+  /api/products:
+    get:
+      summary: Отримати список продуктів
+      responses:
+        '200':
+          description: Список продуктів
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+    post:
+      summary: Створити новий продукт
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        '201':
+          description: Продукт створено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Помилка валідації
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/products/{id}:
+    get:
+      summary: Отримати продукт за ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Продукт знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Продукт не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Оновити продукт за ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        '200':
+          description: Продукт оновлено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Помилка валідації
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Видалити продукт за ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Продукт видалено
+        '404':
+          description: Продукт не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "abc123"
+        name:
+          type: string
+          example: "Galaxy Anti-Gravity Ball"
+        description:
+          type: string
+          example: "A cosmic ball with anti-gravity properties for cats."
+        price:
+          type: number
+          format: double
+          example: 19.99
+    ProductRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Starry Cosmic Milk"
+          description: "Назва продукту повинна містити космічні терміни, наприклад 'star', 'galaxy', 'comet'."
+        description:
+          type: string
+          example: "Milk from cows raised on a comet."
+        price:
+          type: number
+          format: double
+          example: 5.99
+      required:
+        - name
+        - price
+    Error:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 400
+        error:
+          type: string
+          example: "Bad Request"
+        message:
+          type: string
+          example: "Field 'name' must contain a cosmic term such as 'star', 'galaxy', or 'comet'."
+        path:
+          type: string
+          example: "/api/products"
