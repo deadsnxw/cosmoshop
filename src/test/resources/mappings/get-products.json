@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/products"
+  },
+  "response": {
+    "status": 200,
+    "body": "[{\"id\": \"1\", \"name\": \"Galaxy Explorer\", \"description\": \"Explore the galaxy with ease.\", \"price\": 199.99}, {\"id\": \"2\", \"name\": \"Cosmic Ray Detector\", \"description\": \"Detect cosmic rays with precision.\", \"price\": 299.99}]",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
