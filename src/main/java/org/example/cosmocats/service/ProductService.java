@@ -1,22 +1,26 @@
 package org.example.cosmocats.service;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 import org.example.cosmocats.domain.Product;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class ProductService {
 
     private final List<Product> products = new ArrayList<>();
     private final WebClient webClient;
+    private Validator validator;
 
     public ProductService(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.baseUrl("http://localhost:8080").build();
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
 
         // Ініціалізація локальних продуктів
         Product product1 = new Product();
@@ -35,6 +39,10 @@ public class ProductService {
         products.add(product2);
     }
 
+    public void updateProduct(Product product) {
+        Set<ConstraintViolation<Product>> violations = validator.validate(product, Product.UpdateGroup.class);
+    }
+
     // Робота з локальними продуктами
     public List<Product> getAllProducts() {
         return products;
@@ -46,6 +54,7 @@ public class ProductService {
 
     public Product createProduct(Product product) {
         product.setId(UUID.randomUUID());
+        Set<ConstraintViolation<Product>> violations = validator.validate(product, Product.CreateGroup.class);
         products.add(product);
         return product;
     }
@@ -60,13 +69,18 @@ public class ProductService {
     }
 
     public boolean deleteProduct(UUID id) {
-        return products.removeIf(product -> product.getId().equals(id));
+        Optional<Product> product = getProductById(id);
+        if (product.isPresent()) {
+            products.removeIf(p -> p.getId().equals(id));
+            return true; // Продукт був видалений
+        }
+        return false; // Продукт не існував
     }
 
     // метод для роботи з заглушкой
     public List<Product> fetchProductsFromExternalApi() {
         return webClient.get()
-                .uri("/api/products")
+                .uri("/api/v1/products")
                 .retrieve()
                 .bodyToFlux(Product.class)
                 .collectList()

@@ -2,9 +2,12 @@ package org.example.cosmocats.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
+
 import java.util.UUID;
 import java.util.List;
 
+@Data
 public class CategoryDto {
     private UUID id;
 
@@ -16,31 +19,6 @@ public class CategoryDto {
     private String description;
 
     private List<UUID> productIds;
-
-    // Getters and Setters
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     public List<UUID> getProductIds() {
         return productIds;

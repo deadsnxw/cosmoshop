@@ -1,10 +1,13 @@
 package org.example.cosmocats.dto;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+@Data
 public class OrderDto {
     private UUID id;
 
@@ -15,31 +18,6 @@ public class OrderDto {
     private String status;
 
     private List<UUID> productIds;
-
-    // Getters and Setters
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public LocalDateTime getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(LocalDateTime orderDate) {
-        this.orderDate = orderDate;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public List<UUID> getProductIds() {
         return productIds;

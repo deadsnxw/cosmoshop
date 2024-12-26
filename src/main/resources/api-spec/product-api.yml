@@ -1,15 +1,15 @@
 openapi: 3.0.1
 info:
   title: Cosmo Cats Intergalactic Marketplace API
-  description: API для управління товарами на маркетплейсі космічних товарів.
+  description: API for cosmic cat products
   version: 1.0.0
 paths:
   /api/products:
     get:
-      summary: Отримати список продуктів
+      summary: Get list of products
       responses:
         '200':
-          description: Список продуктів
+          description: list of products
           content:
             application/json:
               schema:
@@ -17,7 +17,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Product'
     post:
-      summary: Створити новий продукт
+      summary: create a product
       requestBody:
         required: true
         content:
@@ -26,20 +26,20 @@ paths:
               $ref: '#/components/schemas/ProductRequest'
       responses:
         '201':
-          description: Продукт створено
+          description: product created
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
         '400':
-          description: Помилка валідації
+          description: validation error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
   /api/products/{id}:
     get:
-      summary: Отримати продукт за ID
+      summary: Get product by ID
       parameters:
         - name: id
           in: path
@@ -48,19 +48,19 @@ paths:
             type: string
       responses:
         '200':
-          description: Продукт знайдено
+          description: product found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
         '404':
-          description: Продукт не знайдено
+          description: product not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
     put:
-      summary: Оновити продукт за ID
+      summary: Update product by ID
       parameters:
         - name: id
           in: path
@@ -75,19 +75,19 @@ paths:
               $ref: '#/components/schemas/ProductRequest'
       responses:
         '200':
-          description: Продукт оновлено
+          description: product updated
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
         '400':
-          description: Помилка валідації
+          description: validation error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
     delete:
-      summary: Видалити продукт за ID
+      summary: Delete product by ID
       parameters:
         - name: id
           in: path
@@ -96,9 +96,9 @@ paths:
             type: string
       responses:
         '204':
-          description: Продукт видалено
+          description: product deleted
         '404':
-          description: Продукт не знайдено
+          description: product not found
           content:
             application/json:
               schema:
@@ -127,7 +127,7 @@ components:
         name:
           type: string
           example: "Starry Cosmic Milk"
-          description: "Назва продукту повинна містити космічні терміни, наприклад 'star', 'galaxy', 'comet'."
+          description: "The name of product must contain 'star', 'galaxy', 'comet'."
         description:
           type: string
           example: "Milk from cows raised on a comet."
@@ -152,4 +152,4 @@ components:
           example: "Field 'name' must contain a cosmic term such as 'star', 'galaxy', or 'comet'."
         path:
           type: string
-          example: "/api/products"
+          example: "/api/v1/products"

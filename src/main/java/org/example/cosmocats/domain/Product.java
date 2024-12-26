@@ -9,21 +9,25 @@ import org.example.cosmocats.shared.validation.CosmicWordCheck;
 import java.util.UUID;
 
 public class Product {
+    public interface CreateGroup {}
+    public interface UpdateGroup {}
+
+    @NotNull(groups = {CreateGroup.class, UpdateGroup.class})
     private UUID id;
 
-    @CosmicWordCheck
-    @NotBlank(message = "Product name cannot be blank.")
-    @Size(max = 100, message = "Product name cannot exceed 100 characters.")
+    @CosmicWordCheck(groups = {CreateGroup.class, UpdateGroup.class})
+    @NotBlank(message = "Product name cannot be blank.", groups = {CreateGroup.class, UpdateGroup.class})
+    @Size(max = 100, message = "Product name cannot exceed 100 characters.", groups = {CreateGroup.class, UpdateGroup.class})
     private String name;
 
-    @Size(max = 255, message = "Description cannot exceed 255 characters.")
+    @Size(max = 255, message = "Description cannot exceed 255 characters.", groups = {CreateGroup.class, UpdateGroup.class})
     private String description;
 
-    @NotNull(message = "Price is required.")
-    @Min(value = 0, message = "Price must be greater than or equal to 0.")
+    @NotNull(message = "Price is required.", groups = {CreateGroup.class})
+    @Min(value = 0, message = "Price must be greater than or equal to 0.", groups = {CreateGroup.class, UpdateGroup.class})
     private Double price;
 
-    // Getters and Setters
+    // залишив тут геттери та сеттери, бо виникають проблеми з маппером через ломбок
     public UUID getId() {
         return id;
     }

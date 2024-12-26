@@ -14,9 +14,8 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/api/v1/products")
 public class ProductController {
-
     private final ProductService productService;
     private final ProductMapper productMapper;
 
@@ -25,7 +24,7 @@ public class ProductController {
         this.productMapper = productMapper;
     }
 
-    // GET: /api/products - Отримати всі продукти
+    // GET: /api/v1/products - Отримати всі продукти
     @GetMapping
     public ResponseEntity<List<ProductResponseDTO>> getAllProducts() {
         List<Product> products = productService.getAllProducts();
@@ -33,7 +32,7 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
-    // GET: /api/products/{id} - Отримати продукт за ID
+    // GET: /api/v1/products/{id} - Отримати продукт за ID
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable UUID id) {
         return productService.getProductById(id)
@@ -41,7 +40,7 @@ public class ProductController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // POST: /api/products - Створити новий продукт
+    // POST: /api/v1/products - Створити новий продукт
     @PostMapping
     public ResponseEntity<ProductResponseDTO> createProduct(@Valid @RequestBody ProductRequestDTO productRequest) {
         Product product = productMapper.toEntity(productRequest);
@@ -50,7 +49,7 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    // PUT: /api/products/{id} - Оновити існуючий продукт
+    // PUT: /api/v1/products/{id} - Оновити існуючий продукт
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponseDTO> updateProduct(
             @PathVariable UUID id,
@@ -62,13 +61,12 @@ public class ProductController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // DELETE: /api/products/{id} - Видалити продукт за ID
+    // DELETE: /api/v1/products/{id} - Видалити продукт за ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable UUID id) {
         if (productService.deleteProduct(id)) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.noContent().build(); // Продукт видалено
         }
+        return ResponseEntity.noContent().build(); // Продукт не існував
     }
 }
