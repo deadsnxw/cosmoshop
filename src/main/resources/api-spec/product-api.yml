@@ -1,0 +1,155 @@
+openapi: 3.0.1
+info:
+  title: Cosmo Cats Intergalactic Marketplace API
+  description: API for cosmic cat products
+  version: 1.0.0
+paths:
+  /api/products:
+    get:
+      summary: Get list of products
+      responses:
+        '200':
+          description: list of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+    post:
+      summary: create a product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        '201':
+          description: product created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/products/{id}:
+    get:
+      summary: Get product by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: product found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update product by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        '200':
+          description: product updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete product by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: product deleted
+        '404':
+          description: product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "abc123"
+        name:
+          type: string
+          example: "Galaxy Anti-Gravity Ball"
+        description:
+          type: string
+          example: "A cosmic ball with anti-gravity properties for cats."
+        price:
+          type: number
+          format: double
+          example: 19.99
+    ProductRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Starry Cosmic Milk"
+          description: "The name of product must contain 'star', 'galaxy', 'comet'."
+        description:
+          type: string
+          example: "Milk from cows raised on a comet."
+        price:
+          type: number
+          format: double
+          example: 5.99
+      required:
+        - name
+        - price
+    Error:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 400
+        error:
+          type: string
+          example: "Bad Request"
+        message:
+          type: string
+          example: "Field 'name' must contain a cosmic term such as 'star', 'galaxy', or 'comet'."
+        path:
+          type: string
+          example: "/api/v1/products"
